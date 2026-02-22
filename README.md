@@ -1,7 +1,3 @@
----
-description: End-user guide for using casefile-runner to parse and execute YAML case files for CLI and integration tests.
----
-
 # casefile-runner
 
 ## What It Is
