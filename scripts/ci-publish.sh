@@ -4,17 +4,13 @@ set -euo pipefail
 npm ci
 npm run build
 
-release_version="${CI_COMMIT_TAG#v}"
-node ./scripts/set-release-version-from-tag.mjs "$release_version" "${CI_COMMIT_TAG:-}"
-
-if [[ -z "${NPM_ID_TOKEN:-}" ]]; then
-  echo "NPM_ID_TOKEN is missing. Configure GitLab id_tokens for npm Trusted Publishing."
+tag_value="${CI_COMMIT_TAG:-${GITHUB_REF_NAME:-}}"
+if [[ -z "$tag_value" ]]; then
+  echo "No release tag was found. Expected CI_COMMIT_TAG or GITHUB_REF_NAME."
   exit 1
 fi
 
-if [[ -z "${SIGSTORE_ID_TOKEN:-}" ]]; then
-  echo "SIGSTORE_ID_TOKEN is missing. Configure GitLab id_tokens for provenance."
-  exit 1
-fi
+release_version="${tag_value#v}"
+node ./scripts/set-release-version-from-tag.mjs "$release_version" "$tag_value"
 
 npm publish --access public
