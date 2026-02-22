@@ -13,4 +13,9 @@ fi
 release_version="${tag_value#v}"
 node ./scripts/set-release-version-from-tag.mjs "$release_version" "$tag_value"
 
+if [[ -z "${NODE_AUTH_TOKEN:-}" && -z "${NPM_TOKEN:-}" ]]; then
+  echo "Missing npm auth token. Set NODE_AUTH_TOKEN or NPM_TOKEN in CI."
+  exit 1
+fi
+
 npm publish --access public

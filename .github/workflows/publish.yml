@@ -34,7 +34,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,3 +47,5 @@ jobs:
 
       - name: Publish to npm
         run: ./scripts/ci-publish.sh
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
